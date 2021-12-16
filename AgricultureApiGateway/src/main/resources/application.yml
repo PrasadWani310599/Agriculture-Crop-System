@@ -1,0 +1,48 @@
+server:
+  port: 8098
+
+
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: cropdetails
+          uri: http://localhost:8086/
+          predicates:
+            - Path=/crop/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: crop-details
+                fallbackuri: forward:/cropdetailsfallback
+
+
+        - id: farmerdetails
+          uri: http://localhost:8081/
+          predicates:
+            - Path=/farmer/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: farmer-details
+                fallbackuri: forward:/farmerdetailsFallback
+
+        - id: orderdetails
+          uri: http://localhost:8087/
+          predicates:
+            - Path=/order/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: farmer-details
+                fallbackuri: forward:/orderdetailsFallback
+
+        - id: dealerdetails
+          uri: http://localhost:8089/
+          predicates:
+            - Path=/dealer/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: dealer-details
+                fallbackuri: forward:/dealerdetailsFallback
